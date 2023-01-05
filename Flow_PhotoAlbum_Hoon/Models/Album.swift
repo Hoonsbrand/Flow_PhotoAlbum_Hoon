@@ -8,7 +8,7 @@
 import UIKit
 import Photos
 
-class Album {
+struct Album {
     let name: String
     let count: Int
     let collection: PHAssetCollection

@@ -33,7 +33,6 @@ final class PhotoCell: UICollectionViewCell {
         self.addSubview(photoView)
         photoView.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
     }
-
 }
 
 // MARK: - ReuseIdentifier

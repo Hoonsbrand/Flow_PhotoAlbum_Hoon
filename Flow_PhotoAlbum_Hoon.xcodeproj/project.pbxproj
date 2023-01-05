@@ -72,14 +72,13 @@
 		7298FA1729644AAE009CC1D0 /* Flow_PhotoAlbum_Hoon */ = {
 			isa = PBXGroup;
 			children = (
-				7298FA3829645E85009CC1D0 /* Model */,
+				7298FA3829645E85009CC1D0 /* Models */,
 				7298FA3329644DB1009CC1D0 /* Services */,
 				7298FA3029644CF5009CC1D0 /* Utils */,
-				7298FA2E29644CDD009CC1D0 /* Controller */,
-				7298FA2D29644CDA009CC1D0 /* ViewModel */,
-				7298FA2C29644CB2009CC1D0 /* View */,
-				7298FA1829644AAE009CC1D0 /* AppDelegate.swift */,
-				7298FA1A29644AAE009CC1D0 /* SceneDelegate.swift */,
+				7298FA2E29644CDD009CC1D0 /* Controllers */,
+				7298FA2D29644CDA009CC1D0 /* ViewModels */,
+				7298FA2C29644CB2009CC1D0 /* Views */,
+				72FAABAC2966C33100A48A1A /* Common */,
 				7298FA2129644AAE009CC1D0 /* Assets.xcassets */,
 				7298FA2329644AAE009CC1D0 /* LaunchScreen.storyboard */,
 				7298FA2629644AAE009CC1D0 /* Info.plist */,
@@ -87,30 +86,30 @@
 			path = Flow_PhotoAlbum_Hoon;
 			sourceTree = "<group>";
 		};
-		7298FA2C29644CB2009CC1D0 /* View */ = {
+		7298FA2C29644CB2009CC1D0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				7298FA36296453D6009CC1D0 /* PhotoCell.swift */,
 				72FDD9AC29646AD400CE0F13 /* AlbumListCell.swift */,
+				7298FA36296453D6009CC1D0 /* PhotoCell.swift */,
 			);
-			path = View;
+			path = Views;
 			sourceTree = "<group>";
 		};
-		7298FA2D29644CDA009CC1D0 /* ViewModel */ = {
+		7298FA2D29644CDA009CC1D0 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
 				72D8D200296536AF0056960B /* AlbumViewModel.swift */,
 			);
-			path = ViewModel;
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
-		7298FA2E29644CDD009CC1D0 /* Controller */ = {
+		7298FA2E29644CDD009CC1D0 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				7298FA1C29644AAE009CC1D0 /* PhotoController.swift */,
 				72FDD9AA296469AA00CE0F13 /* AlbumController.swift */,
+				7298FA1C29644AAE009CC1D0 /* PhotoController.swift */,
 			);
-			path = Controller;
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		7298FA3029644CF5009CC1D0 /* Utils */ = {
@@ -130,13 +129,22 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		7298FA3829645E85009CC1D0 /* Model */ = {
+		7298FA3829645E85009CC1D0 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				72FDD9B02964886200CE0F13 /* Album.swift */,
 				72FAABAA296698AE00A48A1A /* AlbumVarieties.swift */,
 			);
-			path = Model;
+			path = Models;
+			sourceTree = "<group>";
+		};
+		72FAABAC2966C33100A48A1A /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				7298FA1829644AAE009CC1D0 /* AppDelegate.swift */,
+				7298FA1A29644AAE009CC1D0 /* SceneDelegate.swift */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

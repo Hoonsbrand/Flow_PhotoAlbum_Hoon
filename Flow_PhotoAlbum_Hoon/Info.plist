@@ -20,6 +20,6 @@
 		</dict>
 	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string></string>
+	<string>앨범을 조회하기 위해 권한을 허용해주세요.</string>
 </dict>
 </plist>

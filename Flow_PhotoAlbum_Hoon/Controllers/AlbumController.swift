@@ -77,16 +77,37 @@ final class AlbumController: UIViewController {
     }
     
     /// 앨범접근 허가요청 AlertView
-    private func showAlertView(completion: @escaping (UIAlertAction) -> ()) {
+    private func showAlertView() {
         let alert = UIAlertController(title: "접근을 허가해주세요.",
                                       message: "앨범을 조회하기 위해 모든 사진에 대한 접근을 허가해주세요.",
                                       preferredStyle: .alert)
         
-        let okButton = UIAlertAction(title: "확인", style: .default, handler: completion)
+        // 모든 사진에 대해 승인을 하지 않으면 "이동", "취소" 두개의 버튼 선택지가 있다.
+        // 1. 이동을 누르게 되면 설정창으로 이동을 한다.
+        // 설정창에서 승인 범위를 모든 사진으로 하고 앱으로 돌아오면 정상적으로 작동을 한다.
+        let getAuthAction = UIAlertAction(title: "이동", style: .default, handler: { _ in
+            if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(appSettings,options: [:],completionHandler: nil)
+            }
+        })
         
-        alert.addAction(okButton)
-        present(alert, animated: true)
+        // 2. 취소를 누르게 되면 앱을 종료시킨다.
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel) { _ in
+            UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                exit(0)
+            }
+        }
+        
+        alert.addAction(getAuthAction)
+        alert.addAction(cancelAction)
+        
+        DispatchQueue.main.async {
+            self.present(alert, animated: true)
+        }
     }
+    
+    
 }
 
 // MARK: - getAlbumsFromLocal: 로컬 사진첩으로부터 앨범 가져옴
@@ -105,21 +126,46 @@ extension AlbumController {
 extension AlbumController {
     /// 앨범접근 허가 요청
     private func checkAuthAndLoadData() {
-        let photoLibraryAuthrizationStatus = PHPhotoLibrary.authorizationStatus()
+        let photoLibraryAuthrizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
         
-        switch photoLibraryAuthrizationStatus {
-        case .authorized:
-            self.getAlbumsFromLocal()
-            self.tableView.reloadData()
-            
-        default:
-            showAlertView { _ in
-                UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    exit(0)
+        PHPhotoLibrary.requestAuthorization(for: .readWrite) { authorizationStatus in
+            switch photoLibraryAuthrizationStatus {
+                
+            // 앱 첫 진입 시 권한 승인에 대한 case는 .notDetermined에서 이루어진다.
+            // 밑에있는 .authorized와 default는 첫 승인 요청 후 앱 내에 적용되어 있는 승인 여부에 따라 호출이 된다.
+            case .notDetermined:
+                print("권한에 대한 승인 보류")
+                PHPhotoLibrary.requestAuthorization(for: .readWrite) { authorizationStatus in
+                    switch authorizationStatus {
+                        
+                    // 모든 사진에 대해 승인 되었을 때
+                    case .authorized:
+                        print("권한이 승인됨.")
+                        self.getAlbumsFromLocal()
+                        
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
+                        
+                    // 모든 사진에 대한 승인 외 나머지
+                    default:
+                        self.showAlertView()
+                    }
                 }
+                
+            // 모든 사진에 대해 승인 되었을 때
+            case .authorized:
+                print("권한이 승인됨.")
+                self.getAlbumsFromLocal()
+                
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            
+            // 모든 사진에 대한 승인 외 나머지
+            default:
+                self.showAlertView()
             }
-            break
         }
     }
 }

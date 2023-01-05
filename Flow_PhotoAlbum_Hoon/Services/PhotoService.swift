@@ -20,19 +20,22 @@ struct PhotoService {
     /// 로컬 사진첩에 저장된 앨범들을 가져오는 메서드
     func getAlbumsFromLocal(completion: @escaping (Album) -> ()) {
         
+        // 앨범에 대한 정보를 받을 fetchResult 변수
+        // asset들을 가져오는 fetchAsset의 리턴 타입과 동일한 PHFetchResult<PHAsset> 타입으로 선언해준다.
         var fetchResult: PHFetchResult<PHAsset>?
-    
-        // 각 앨범의 사진 타이틀이름, 수 가져오기
-        AlbumVarieties().AlbumVarieties.forEach {
-            $0.enumerateObjects { album, index, stop in
-
-                // PHAssetCollection의 localizedTitle을 이용해 앨범 타이틀 가져오기
-                let albumTitle: String = album.localizedTitle!
+            
+        // albumList에 들어있는 앨범들을 순회하면서 각 앨범의 정보를 가져온다.
+        AlbumVarieties().albumList.forEach {
+            $0.enumerateObjects { album, _, _ in
                 
+                // 앨범에서 Asset들을 추출해 fetchResult에 담는다.
                 fetchResult = PHAsset.fetchAssets(in: album, options: nil)
                 
-                // 앨범의 사진 개수
+                // 앨범의 사진 개수, 앨범에 사진이 없다면 즉시 return 하여 메서드를 종료시킴.
                 guard let albumCount = fetchResult?.count, albumCount > 0 else { return }
+                
+                // PHAssetCollection의 localizedTitle을 이용해 앨범 타이틀 가져오기
+                let albumTitle: String = album.localizedTitle!
                 
                 var thumbnailAsset = PHAsset()
                 
