@@ -18,7 +18,7 @@ struct PhotoService {
     // MARK: - Helpers
     
     /// 로컬 사진첩에 저장된 앨범들을 가져오는 메서드
-    func getAlbumsFromLocal(completion: @escaping (Album) -> ()) {
+    func getAlbumsFromLocal(completion: @escaping (Album) -> Void) {
         
         // 앨범에 대한 정보를 받을 fetchResult 변수
         // asset들을 가져오는 fetchAsset의 리턴 타입과 동일한 PHFetchResult<PHAsset> 타입으로 선언해준다.
@@ -26,8 +26,8 @@ struct PhotoService {
             
         // albumList에 들어있는 앨범들을 순회하면서 각 앨범의 정보를 가져온다.
         AlbumVarieties().albumList.forEach {
+            
             $0.enumerateObjects { album, _, _ in
-                
                 // 앨범에서 Asset들을 추출해 fetchResult에 담는다.
                 fetchResult = PHAsset.fetchAssets(in: album, options: nil)
                 
@@ -38,7 +38,7 @@ struct PhotoService {
                 let albumTitle: String = album.localizedTitle!
                 
                 var thumbnailAsset = PHAsset()
-                
+                print("DEBUG: title: \(albumTitle), type: \(album.assetCollectionType)")
                 // 썸네일 사진 가져오기
                 switch album.assetCollectionType {
                     
@@ -56,10 +56,10 @@ struct PhotoService {
                                                targetSize: CGSize(width: 70, height: 70),
                                                contentMode: .aspectFit,
                                                options: option) { image, _ in
-                    guard let image = image else { return }
+                    guard let thumbnailImage = image else { return }
                     
                     // 저장
-                    let fetchedAlbum = Album(name:albumTitle, count: albumCount, collection: album, thumbnail: image)
+                    let fetchedAlbum = Album(name:albumTitle, count: albumCount, collection: album, thumbnail: thumbnailImage)
                     
                     completion(fetchedAlbum)
                 }
@@ -69,12 +69,13 @@ struct PhotoService {
     
     /// 선택된 앨범의 사진을 가져오는 메서드
     func getImageFromAlbum(index: Int, collection: PHAssetCollection, targetSize: CGSize, completion: @escaping (UIImage) -> Void) {
-        let fetchResult = PHAsset.fetchAssets(in: collection, options: nil)
+        let fetchResult: PHFetchResult<PHAsset> = PHAsset.fetchAssets(in: collection, options: nil)
       
         // 고품질 사진 옵션 설정
         let option = PHImageRequestOptions()
         option.isSynchronous = true
         
+        // 각 Cell에 표시하기 위한 asset은 fetchResult를 index로 접근해 가져온다.
         let asset: PHAsset = fetchResult.object(at: index)
         
         imageManager.requestImage(for: asset,
@@ -82,7 +83,6 @@ struct PhotoService {
                                   contentMode: .aspectFit,
                                   options: option) { image, _ in
             guard let image = image else { return }
-            print(image)
             completion(image)
         }
     }
@@ -107,3 +107,5 @@ struct PhotoService {
         completion(filename, filesize)
     }
 }
+
+
