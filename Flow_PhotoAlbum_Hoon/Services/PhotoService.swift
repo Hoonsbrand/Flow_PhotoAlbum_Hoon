@@ -52,6 +52,7 @@ struct PhotoService {
                 let option = PHImageRequestOptions()
                 option.isSynchronous = true
                 
+                // UIImage로 가져오기
                 imageManager.requestImage(for: thumbnailAsset,
                                                targetSize: CGSize(width: 70, height: 70),
                                                contentMode: .aspectFit,
@@ -78,6 +79,7 @@ struct PhotoService {
         // 각 Cell에 표시하기 위한 asset은 fetchResult를 index로 접근해 가져온다.
         let asset: PHAsset = fetchResult.object(at: index)
         
+        // UIImage로 가져오기
         imageManager.requestImage(for: asset,
                                   targetSize: targetSize,
                                   contentMode: .aspectFit,
@@ -89,23 +91,36 @@ struct PhotoService {
     
     /// 사진의 파일명, 파일크기를 가져오는 메서드
     func getPhotoInfo(collection: PHAssetCollection, index: Int, completion: @escaping(String, String) -> Void) {
-        let fetchResult = PHAsset.fetchAssets(in: collection, options: nil)
+        // 선택한 사진이 속해있는 앨범
+        let fetchResult: PHFetchResult<PHAsset> = PHAsset.fetchAssets(in: collection, options: nil)
                 
+        // 사진을 클릭하여 선택된 에셋
         let asset: PHAsset = fetchResult.object(at: index)
-
-        let resources = PHAssetResource.assetResources(for: asset)
-        guard let filename = resources.first?.originalFilename as? String else { return }
+        print("DEBUG: asset: \(asset)")
         
+        // 에섯의 정보가 담겨있는 resources
+        let resources: [PHAssetResource] = PHAssetResource.assetResources(for: asset)
+        print("DEBUG: resources: \(resources)")
+        
+        guard let resource = resources.first else { return }
+        
+        // 파일 이름
+        guard let filename = resource.originalFilename as? String else { return }
+        print("DEBUG: originalFilename's type: \(type(of: resources.first?.originalFilename))")
+        
+        // 파일 크기
         var filesize = ""
-        var sizeOnDisk: Int64 = 0
-        if let resource = resources.first {
-            let unsignedInt64 = resource.value(forKey: "fileSize") as? CLong
-            sizeOnDisk = Int64(bitPattern: UInt64(unsignedInt64!))
-            filesize = String(format: "%.2f", Double(sizeOnDisk) / (1024.0*1024.0)) + " MB"
-        }
+       
+        guard let byte = resource.value(forKey: "fileSize") as? UInt64 else { return }
+        print("DEBUG: byte: \(byte)")
+        
+        // MB로 변환한 String 값 할당
+        filesize = String(format: "%.2f", Double(byte) / (1024.0*1024.0)) + " MB"
         
         completion(filename, filesize)
     }
 }
+
+
 
 

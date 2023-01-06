@@ -79,7 +79,7 @@ final class AlbumController: UIViewController {
     /// 앨범접근 허가요청 AlertView
     private func showAlertView() {
         let alert = UIAlertController(title: "접근을 허가해주세요.",
-                                      message: "앨범을 조회하기 위해 모든 사진에 대한 접근을 허가해주세요.",
+                                      message: "앨범을 조회하기 위해 설정 앱에서 모든 사진에 대한 접근을 허가해주세요.",
                                       preferredStyle: .alert)
         
         // 모든 사진에 대해 승인을 하지 않으면 "이동", "취소" 두개의 버튼 선택지가 있다.
@@ -106,8 +106,6 @@ final class AlbumController: UIViewController {
             self.present(alert, animated: true)
         }
     }
-    
-    
 }
 
 // MARK: - getAlbumsFromLocal: 로컬 사진첩으로부터 앨범 가져옴
@@ -124,7 +122,7 @@ extension AlbumController {
 // MARK: - checkAuthAndLoadData
 
 extension AlbumController {
-    /// 앨범접근 허가 요청
+    /// 앨범 접근권한 승인요청
     private func checkAuthAndLoadData() {
         let photoLibraryAuthrizationStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
         
