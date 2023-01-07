@@ -69,7 +69,8 @@ struct PhotoService {
     }
     
     /// 선택된 앨범의 사진을 가져오는 메서드
-    func getImageFromAlbum(index: Int, collection: PHAssetCollection, targetSize: CGSize, completion: @escaping (UIImage) -> Void) {
+    func getImageFromAlbum(index: Int, collection: PHAssetCollection, targetSize: CGSize = PHImageManagerMaximumSize,
+                           completion: @escaping (UIImage) -> Void) {
         let fetchResult: PHFetchResult<PHAsset> = PHAsset.fetchAssets(in: collection, options: nil)
       
         // 고품질 사진 옵션 설정

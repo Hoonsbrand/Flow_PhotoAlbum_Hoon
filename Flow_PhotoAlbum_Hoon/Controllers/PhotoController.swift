@@ -91,14 +91,11 @@ extension PhotoController: UICollectionViewDelegate, UICollectionViewDataSource 
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.reuseIdentifier,
                                                       for: indexPath) as! PhotoCell
         
-        let targetSize = cell.photoView.frame.size
-        
         PhotoService.shared.getImageFromAlbum(index: indexPath.item,
                                               collection: album.collection,
-                                              targetSize: targetSize) { image in
+                                              targetSize: CGSize(width: 300, height: 300)) { image in
             cell.photoView.image = image
         }
-     
         return cell
     }
     
@@ -127,6 +124,7 @@ extension PhotoController: UICollectionViewDelegateFlowLayout {
         return itemSize
     }
 }
+
 
 
 
