@@ -7,10 +7,10 @@
 
 import UIKit
 
-//struct Photo {
-//    let photosWithAlbumTitle: [String: [UIImage]]
-//
-//    init(photosWithAlbumTitle: [String : [UIImage]]) {
-//        self.photosWithAlbumTitle = photosWithAlbumTitle
-//    }
-//}
+struct Photo {
+    let photosWithAlbumTitle: [String: [UIImage]]
+
+    init(photosWithAlbumTitle: [String : [UIImage]]) {
+        self.photosWithAlbumTitle = photosWithAlbumTitle
+    }
+}

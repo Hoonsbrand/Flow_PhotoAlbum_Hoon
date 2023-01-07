@@ -4,7 +4,7 @@
 //
 //  Created by hoonsbrand on 2023/01/03.
 //
-// develop test
+
 import UIKit
 import Photos
 
@@ -14,6 +14,9 @@ final class AlbumController: UIViewController {
     
     // 앨범 리스트를 받을 변수
     private var albumList = [Album]()
+    
+    // 전체 사진을 받을 변수
+    private var photos = [[UIImage]]()
     
     // TableView 생성 & Cell 등록
     private let tableView: UITableView = {
@@ -70,9 +73,10 @@ final class AlbumController: UIViewController {
     }
     
     /// PhotoController에 album을 넘겨주며 pushView로 화면 전환
-    private func pushView(album: Album) {
-        let vc = PhotoController(album: album)
+    private func pushView(album: Album, index: Int) {
+        let vc = PhotoController(album: album, photos: photos[index])
         
+//        print("DEBUG: photosWithAlbumTitle: \(photosWithAlbumTitle[album.name]!)")
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -113,8 +117,12 @@ final class AlbumController: UIViewController {
 extension AlbumController {
     /// 로컬 사진첩으로부터 앨범을 가져옴
     private func getAlbumsFromLocal() {
-        PhotoService.shared.getAlbumsFromLocal { fetchedAlbums in
+        PhotoService.shared.getAlbumsFromLocal { fetchedAlbums, photos in
             self.albumList.append(fetchedAlbums)
+            self.photos = photos
+
+            print("DEBUG: ----------\(fetchedAlbums.name)-----------")
+            print("DEBUG: photos: \(photos)")
         }
     }
 }
@@ -186,7 +194,7 @@ extension AlbumController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        pushView(album: albumList[indexPath.row])
+        pushView(album: albumList[indexPath.row], index: indexPath.row)
     }
 }
 

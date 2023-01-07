@@ -6,14 +6,16 @@
 //
 
 import UIKit
-import Photos
 
 final class PhotoController: UIViewController {
     
     // MARK: - Properties
     
     // AlbumController에서 선택된 앨범을 담을 변수
-    private var album: Album 
+    private var album: Album
+    
+    // AlbumController에서 앨범 Title과 사진을 담을 변수
+    private var photos: [UIImage]
     
     // CollectionView 생성
     private var collectionView: UICollectionView = {
@@ -33,11 +35,13 @@ final class PhotoController: UIViewController {
         
         configureCollectionView()
         configureUI()
+        print("DEBUG: photos: \(photos)")
     }
     
     /// 생성자 파라미터로 Album타입을 받아 멤버변수에 할당
-    init(album: Album) {
+    init(album: Album, photos: [UIImage]) {
         self.album = album
+        self.photos = photos
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -91,13 +95,16 @@ extension PhotoController: UICollectionViewDelegate, UICollectionViewDataSource 
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.reuseIdentifier,
                                                       for: indexPath) as! PhotoCell
         
-        let targetSize = cell.photoView.frame.size
+//        let targetSize = cell.photoView.frame.size
+//
+//        PhotoService.shared.getImageFromAlbum(index: indexPath.item,
+//                                              collection: album.collection,
+//                                              targetSize: targetSize) { image in
+//            cell.photoView.image = image
+//        }
         
-        PhotoService.shared.getImageFromAlbum(index: indexPath.item,
-                                              collection: album.collection,
-                                              targetSize: targetSize) { image in
-            cell.photoView.image = image
-        }
+        cell.photoView.image = photos[indexPath.item]
+//        print("DEBUG: albumTitle: \(album.name)")
      
         return cell
     }
