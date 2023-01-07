@@ -18,9 +18,7 @@ final class AlbumController: UIViewController {
     // TableView 생성 & Cell 등록
     private let tableView: UITableView = {
         let tableView = UITableView()
-        
         tableView.register(AlbumListCell.self, forCellReuseIdentifier: AlbumListCell.reuseIdentifier)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
     
@@ -61,12 +59,8 @@ final class AlbumController: UIViewController {
     /// TableView Constraints 설정
     private func configureUI() {
         view.addSubview(tableView)
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            tableView.rightAnchor.constraint(equalTo: view.rightAnchor)
-        ])
+        tableView.anchor(top: view.topAnchor, left: view.leftAnchor,
+                         bottom: view.bottomAnchor, right: view.rightAnchor)
     }
     
     /// PhotoController에 album을 넘겨주며 pushView로 화면 전환

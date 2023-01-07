@@ -19,9 +19,7 @@ final class PhotoController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .white
         collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.reuseIdentifier)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
     
@@ -58,12 +56,8 @@ final class PhotoController: UIViewController {
         
         view.addSubview(collectionView)
         
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            collectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            collectionView.rightAnchor.constraint(equalTo: view.rightAnchor)
-        ])
+        collectionView.anchor(top: view.topAnchor, left: view.leftAnchor,
+                              bottom: view.bottomAnchor, right: view.rightAnchor)
     }
     
     /// Alert를 띄어주는 메서드
