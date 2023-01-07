@@ -69,7 +69,7 @@ struct PhotoService {
                     // 각 앨범에 접근해 앨범 별 사진을 추출
                     fetchResult?.enumerateObjects({ asset, _, _ in
                         imageManager.requestImage(for: asset,
-                                                  targetSize: PHImageManagerMaximumSize,
+                                                  targetSize: CGSize(width: 300, height: 300),
                                                   contentMode: .aspectFit,
                                                   options: option) { image, _ in
                             guard let image = image else { return }
