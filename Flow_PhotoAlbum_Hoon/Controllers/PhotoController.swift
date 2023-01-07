@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Photos
 
 final class PhotoController: UIViewController {
     
