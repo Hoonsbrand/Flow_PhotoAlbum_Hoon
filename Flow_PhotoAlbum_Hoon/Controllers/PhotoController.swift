@@ -14,7 +14,7 @@ final class PhotoController: UIViewController {
     // AlbumController에서 선택된 앨범을 담을 변수
     private var album: Album
     
-    // AlbumController에서 앨범 Title과 사진을 담을 변수
+    // AlbumController에서 넘겨준 선택된 앨범의 사진을 담을 배열
     private var photos: [UIImage]
     
     // CollectionView 생성
@@ -38,7 +38,7 @@ final class PhotoController: UIViewController {
         print("DEBUG: photos: \(photos)")
     }
     
-    /// 생성자 파라미터로 Album타입을 받아 멤버변수에 할당
+    /// 생성자 파라미터로 Album타입과 [UIImage] 타입을 받아 멤버변수에 할당
     init(album: Album, photos: [UIImage]) {
         self.album = album
         self.photos = photos
@@ -95,16 +95,7 @@ extension PhotoController: UICollectionViewDelegate, UICollectionViewDataSource 
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.reuseIdentifier,
                                                       for: indexPath) as! PhotoCell
         
-//        let targetSize = cell.photoView.frame.size
-//
-//        PhotoService.shared.getImageFromAlbum(index: indexPath.item,
-//                                              collection: album.collection,
-//                                              targetSize: targetSize) { image in
-//            cell.photoView.image = image
-//        }
-        
         cell.photoView.image = photos[indexPath.item]
-//        print("DEBUG: albumTitle: \(album.name)")
      
         return cell
     }

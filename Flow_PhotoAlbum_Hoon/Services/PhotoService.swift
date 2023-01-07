@@ -18,8 +18,9 @@ struct PhotoService {
     // MARK: - Helpers
     
     /// 로컬 사진첩에 저장된 앨범들을 가져오는 메서드
-    func getAlbumsFromLocal(completion: @escaping (Album, [[UIImage]]) -> Void) {
+    func getAlbumsWithPhotosFromLocal(completion: @escaping (Album, [[UIImage]]) -> Void) {
         
+        // 앨범별 사진 배열을 받을 변수
         var photos = [[UIImage]]()
         
         // 앨범에 대한 정보를 받을 fetchResult 변수
@@ -62,24 +63,25 @@ struct PhotoService {
                                                options: option) { image, _ in
                     guard let thumbnailImage = image else { return }
         
-                    var temp = [UIImage]()
+                    // 각 앨범의 사진을 담을 변수
+                    var photosInSpectificAlbum = [UIImage]()
                     
+                    // 각 앨범에 접근해 앨범 별 사진을 추출
                     fetchResult?.enumerateObjects({ asset, _, _ in
-
                         imageManager.requestImage(for: asset,
                                                   targetSize: PHImageManagerMaximumSize,
                                                   contentMode: .aspectFit,
                                                   options: option) { image, _ in
                             guard let image = image else { return }
-//                            print("DEBUG: \(image)")
-                            temp.append(image)
+                            photosInSpectificAlbum.append(image)
                         }
                     })
                     
-                    photos.append(temp)
+                    // 앨범별 사진들의 배열을 담아 모든 앨범의 사진을 각자의 array로 보유
+                    photos.append(photosInSpectificAlbum)
                     
-//                    print("DEBUG: ----------\(albumTitle)----------")
-//                    print("DEBUG: \(photos)")
+                    print("DEBUG: ----------\(albumTitle)----------")
+                    print("DEBUG: \(photos)")
                     
                     // 저장
                     let fetchedAlbum = Album(name:albumTitle, count: albumCount, collection: album, thumbnail: thumbnailImage)
@@ -87,27 +89,6 @@ struct PhotoService {
                     completion(fetchedAlbum, photos)
                 }
             }
-        }
-    }
-    
-    /// 선택된 앨범의 사진을 가져오는 메서드
-    func getImageFromAlbum(index: Int, collection: PHAssetCollection, targetSize: CGSize, completion: @escaping (UIImage) -> Void) {
-        let fetchResult: PHFetchResult<PHAsset> = PHAsset.fetchAssets(in: collection, options: nil)
-        
-        // 고품질 사진 옵션 설정
-        let option = PHImageRequestOptions()
-        option.isSynchronous = true
-        
-        // 각 Cell에 표시하기 위한 asset은 fetchResult를 index로 접근해 가져온다.
-        let asset: PHAsset = fetchResult.object(at: index)
-        
-        // UIImage로 가져오기
-        imageManager.requestImage(for: asset,
-                                  targetSize: targetSize,
-                                  contentMode: .aspectFit,
-                                  options: option) { image, _ in
-            guard let image = image else { return }
-            completion(image)
         }
     }
     

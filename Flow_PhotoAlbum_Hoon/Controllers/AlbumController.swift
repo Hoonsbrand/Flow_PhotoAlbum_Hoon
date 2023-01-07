@@ -15,7 +15,7 @@ final class AlbumController: UIViewController {
     // 앨범 리스트를 받을 변수
     private var albumList = [Album]()
     
-    // 전체 사진을 받을 변수
+    // 앨범별 사진 배열을 받을 변수
     private var photos = [[UIImage]]()
     
     // TableView 생성 & Cell 등록
@@ -74,9 +74,10 @@ final class AlbumController: UIViewController {
     
     /// PhotoController에 album을 넘겨주며 pushView로 화면 전환
     private func pushView(album: Album, index: Int) {
+        // TableView에서 특정 행을 클릭 시 해당 index를 전달받아 모든 앨범의 사진이 들어있는
+        // photos에 index로 접근하여 해당 앨범의 알맞은 이미지를 전달
         let vc = PhotoController(album: album, photos: photos[index])
         
-//        print("DEBUG: photosWithAlbumTitle: \(photosWithAlbumTitle[album.name]!)")
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -117,7 +118,7 @@ final class AlbumController: UIViewController {
 extension AlbumController {
     /// 로컬 사진첩으로부터 앨범을 가져옴
     private func getAlbumsFromLocal() {
-        PhotoService.shared.getAlbumsFromLocal { fetchedAlbums, photos in
+        PhotoService.shared.getAlbumsWithPhotosFromLocal { fetchedAlbums, photos in
             self.albumList.append(fetchedAlbums)
             self.photos = photos
 
