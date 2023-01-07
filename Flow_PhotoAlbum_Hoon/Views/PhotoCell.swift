@@ -11,6 +11,7 @@ final class PhotoCell: UICollectionViewCell {
  
     // MARK: - Properties
     
+    // 사진 View
     var photoView: UIImageView = {
         let iv = UIImageView()
         return iv

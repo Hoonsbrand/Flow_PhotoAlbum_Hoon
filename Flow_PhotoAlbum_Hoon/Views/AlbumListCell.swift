@@ -15,18 +15,21 @@ final class AlbumListCell: UITableViewCell {
         didSet { configureUI() }
     }
     
+    // 앨범 썸네일 사진
     private let thumbnailImage: UIImageView = {
         let iv = UIImageView()
         iv.anchor(width: 70, height: 70)
         return iv
     }()
     
+    // 앨범 제목
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 17)
         return label
     }()
     
+    // 앨범의 사진 개수
     private let imageCountLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12)
